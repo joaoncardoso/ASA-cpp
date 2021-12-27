@@ -1,2 +1,4 @@
 # ProjetoASA
-Projeto de ASA
+Projeto de ASA - 2021
+* Maior subsequência crescente;
+* Maior subsequência crescente comum.

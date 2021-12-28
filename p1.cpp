@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 using namespace std;
 
 
@@ -25,64 +26,64 @@ int main() {
 
 string problem1() {
     vector<int> seq = readToVector();
-    vector<int> lcs (1, 1);
+    vector<int> lss (1, 1); // lss = Longest Subsequence Size
     vector<int> freq (1, 1);
-    int max = 1, num = 0, size = seq.size();
+    int longest = 1, num = 0, size = seq.size();
     for (int i = 1; i < size; i++) {
-        lcs.push_back(0);
+        lss.push_back(0);
         freq.push_back(0);
         for (int j = 0; j < i; j++) {
             if (seq[j] < seq[i]) {
-                if (lcs[j] + 1 > lcs[i]) {
-                    lcs[i] = lcs[j] + 1;
+                if (lss[j] + 1 > lss[i]) {
+                    lss[i] = lss[j] + 1;
                     freq[i] = freq[j];
                 }
-                else if (lcs[j] + 1 == lcs[i])
+                else if (lss[j] + 1 == lss[i])
                     freq[i] += freq[j];
             }
-            else if (lcs[i] < 1)
-                lcs[i] = freq[i] = 1;
+            else if (lss[i] < 1)
+                lss[i] = freq[i] = 1;
         }
-        if (lcs[i] > max)
-            max = lcs[i];
+        longest = max(lss[i], longest);
     }
     for (int i = 0; i < size; i++) {
-        if (lcs[i] == max)
+        if (lss[i] == longest)
             num += freq[i];
     }
-    return to_string(max) + ' ' + to_string(num) + '\n';
+    return to_string(longest) + ' ' + to_string(num) + '\n';
 }
 
 string problem2() {
-    // não funciona - ao preencher a tabela para 1 2 6 3 7 e 1 2 4 7 a maior subsequência comum até ao 3 do primeiro vetor é 3, mas até ao 7 não é 3+1 porque esse 3 englobava a subsequência 1 2 3 no segundo que não poderia ter o 7 a seguir
+    // não funciona para {1 2 6 3 7} e {1 2 4 7}, a LCSS até ao 3 da seq1 é 3,
+    // mas até ao 7 não é 3+1 porque esse 3 englobava a subsequência {1 2 3}
+    // no segundo que não poderia ter o 7 a seguir
 
     vector<int> seq1 = readToVector();
     vector<int> seq2 = readToVector();
-    int maxn = 0, pos_seq2, size1 = seq1.size(), size2 = seq2.size();
-    vector<int> lcs (size1, 0);
-    bool unmatched;
+    int longest = 0, pos_seq2, size1 = seq1.size(), size2 = seq2.size();
+    vector<int> lcss (size1, 0);    // lcss = Longest Common Subsequence Size
+    bool matched;
     for (int i = 0; i < size1; i++) {
-        unmatched = true;
+        matched = false;
         for (int j = size2 - 1; j >= 0; j--) {
             if (seq1[i] == seq2[j]){
-                unmatched = false;
+                matched = true;
                 pos_seq2 = j;
                 break;
             }
         }
-        if (unmatched) continue;
-        for (int k = 0; k <= pos_seq2; k++) {
+        if (!matched) continue;
+        for (int k = min(i-1, pos_seq2); k >= 0; k--) {
             if (seq1[k] < seq1[i]) {
-                lcs[i] = max(lcs[k] + 1, lcs[i]);
+                lcss[i] = max(lcss[k] + 1, lcss[i]);
             }
         }
-        lcs[i] = max(lcs[i], 1);
+        lcss[i] = max(lcss[i], 1);
+        cout << lcss[i];    // debugging
+        longest = max(lcss[i], longest);
     }
-    for (int i = 0; i < size1; i++) {
-        cout << lcs[i];
-        maxn = max(lcs[i], maxn);
-    }
-    return '\n' + to_string(maxn) + '\n';
+    cout << endl;   // debugging
+    return to_string(longest) + '\n';
 }
 
 vector<int> readToVector() {

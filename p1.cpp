@@ -53,22 +53,48 @@ string problem1() {
     return to_string(longest) + ' ' + to_string(num) + '\n';
 }
 
+// string problem2() {
+//     vector<int> seq1 = readToVector();
+//     vector<int> seq2 = readToVector();
+//     int lcss[seq1.size()+1][seq2.size()+1] = {};  // lcss = Longest Common Subsequence Size
+
+//     for (int i = 0; i <= (int)seq1.size(); i++) {
+//         for (int j = 0; j <= (int)seq2.size(); j++) {
+//             if (i * j == 0)
+//                 lcss[i][j] = 0;
+//             else if (seq1[i-1] == seq2[j-1]) {  // match!
+//                 for (int k = j-2; k >= 0; k--) {
+//                     if (seq2[k] < seq2[j-1]) {
+//                         lcss[i][j] = lcss[i-1][k+1] + 1;
+//                         break;
+//                     }
+//                 }
+//                 lcss[i][j] = max(max(lcss[i][j], 1), max(lcss[i-1][j], lcss[i][j-1]));
+//             }
+//             else
+//                 lcss[i][j] = max(lcss[i-1][j], lcss[i][j-1]);
+//         }
+//     }
+//     return to_string(lcss[seq1.size()][seq2.size()]) + '\n';
+// }
+
 string problem2() {
     vector<int> seq1 = readToVector();
     vector<int> seq2 = readToVector();
     int lcss[seq1.size()+1][seq2.size()+1] = {};  // lcss = Longest Common Subsequence Size
+    int pin = -1;
 
     for (int i = 0; i <= (int)seq1.size(); i++) {
         for (int j = 0; j <= (int)seq2.size(); j++) {
-            if (i == 0 || j == 0)
+            if (i * j == 0)
                 lcss[i][j] = 0;
-        
             else if (seq1[i-1] == seq2[j-1]) {  // match!
-                for (int k = j-2; k >= 0; k--) {
-                    if (seq2[k] < seq2[j-1]) {
-                        lcss[i][j] = lcss[i-1][k+1] + 1;
-                        break;
-                    }
+                if (seq1[pin] < seq2[j-1]) {
+                    lcss[i][j] = lcss[i-1][j-1] + 1;
+                    pin = j-1;
+                } 
+                else if (seq1[pin] > seq2[j-1]) {
+                    pin = j-1;
                 }
                 lcss[i][j] = max(max(lcss[i][j], 1), max(lcss[i-1][j], lcss[i][j-1]));
             }

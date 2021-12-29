@@ -54,36 +54,29 @@ string problem1() {
 }
 
 string problem2() {
-    // não funciona para {1 2 6 3 7} e {1 2 4 7}, a LCSS até ao 3 da seq1 é 3,
-    // mas até ao 7 não é 3+1 porque esse 3 englobava a subsequência {1 2 3}
-    // no segundo que não poderia ter o 7 a seguir
-
     vector<int> seq1 = readToVector();
     vector<int> seq2 = readToVector();
-    int longest = 0, pos_seq2, size1 = seq1.size(), size2 = seq2.size();
-    vector<int> lcss (size1, 0);    // lcss = Longest Common Subsequence Size
-    bool matched;
-    for (int i = 0; i < size1; i++) {
-        matched = false;
-        for (int j = size2 - 1; j >= 0; j--) {
-            if (seq1[i] == seq2[j]){
-                matched = true;
-                pos_seq2 = j;
-                break;
+    int lcss[seq1.size()+1][seq2.size()+1] = {};  // lcss = Longest Common Subsequence Size
+
+    for (int i = 0; i <= (int)seq1.size(); i++) {
+        for (int j = 0; j <= (int)seq2.size(); j++) {
+            if (i == 0 || j == 0)
+                lcss[i][j] = 0;
+        
+            else if (seq1[i-1] == seq2[j-1]) {  // match!
+                for (int k = j-2; k >= 0; k--) {
+                    if (seq2[k] < seq2[j-1]) {
+                        lcss[i][j] = lcss[i-1][k+1] + 1;
+                        break;
+                    }
+                }
+                lcss[i][j] = max(max(lcss[i][j], 1), max(lcss[i-1][j], lcss[i][j-1]));
             }
+            else
+                lcss[i][j] = max(lcss[i-1][j], lcss[i][j-1]);
         }
-        if (!matched) continue;
-        for (int k = min(i-1, pos_seq2); k >= 0; k--) {
-            if (seq1[k] < seq1[i]) {
-                lcss[i] = max(lcss[k] + 1, lcss[i]);
-            }
-        }
-        lcss[i] = max(lcss[i], 1);
-        cout << lcss[i];    // debugging
-        longest = max(lcss[i], longest);
     }
-    cout << endl;   // debugging
-    return to_string(longest) + '\n';
+    return to_string(lcss[seq1.size()][seq2.size()]) + '\n';
 }
 
 vector<int> readToVector() {

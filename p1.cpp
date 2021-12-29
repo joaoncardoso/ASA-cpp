@@ -115,6 +115,5 @@ vector<int> readToVector() {
 
     while (ss >> number)
         sequence.push_back(number);
-
     return sequence;
 }

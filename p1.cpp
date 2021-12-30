@@ -12,6 +12,10 @@ vector<int> readToVector();
 string problem1();
 // Problem 2
 string problem2();
+struct cell {
+    int value;
+    bool matched;
+};
 
 
 int main() {
@@ -53,6 +57,10 @@ string problem1() {
     return to_string(longest) + ' ' + to_string(num) + '\n';
 }
 
+
+//===========================================================================================================
+// MOOSHAK 1050 JOTA
+
 string problem2() {
     vector<int> seq1 = readToVector();
     vector<int> seq2 = readToVector();
@@ -83,7 +91,7 @@ string problem2() {
                 lcssline.push_back(max(lcss[i-1][j], lcssline[j-1]));
             cout << to_string(lcssline[j]) + ' ';       // DBG
         }
-        cout << "  (pins: ";                              // DBG
+        cout << "  (pins: ";                            // DBG
         for (int k = 0; k < (int)pinsline.size(); k++)  // DBG
             cout << to_string(pinsline[k]) + ',';       // DBG
         cout << ")\n";                                  // DBG
@@ -92,6 +100,48 @@ string problem2() {
    }
    return to_string(lcss[size1][size2]) + '\n';
 }
+
+
+//===========================================================================================================
+// MOOSHAK 1200 JOTA
+
+// string problem2() {
+//     vector<int> seq1 = readToVector();
+//     vector<int> seq2 = readToVector();
+//     int size1 = seq1.size(), size2 = seq2.size();
+//     vector<vector<cell>> lcss = {}; // lcss = Longest Common Subsequence Size
+
+//     for (int i = 0; i <= size1; i++) {
+//         vector<cell> line = {};
+//         for (int j = 0; j <= size2; j++) {
+//             if (i * j == 0)
+//                 line.push_back({0, false});
+//             else if (seq1[i-1] == seq2[j-1]) {  // match!
+//                 line.push_back({0, true});
+//                 for (int k = j-2; k >= 0; k--) {
+//                     if (seq2[k] < seq2[j-1] && lcss[i-1][k+1].matched == true) {
+//                         line[j].value = lcss[i-1][k+1].value + 1;
+//                         break;
+//                     }
+//                 }
+//                 line[j].value = max(max(line[j].value, 1), max(lcss[i-1][j].value, line[j-1].value));
+//             }
+//             else {
+//                 bool matched = (lcss[i-1][j].matched == true && lcss[i-1][j].value >= line[j-1].value) ? true : false;
+//                 line.push_back({max(lcss[i-1][j].value, line[j-1].value), matched});
+//             }
+//             cout << to_string(line[j].value) + ' ';   // DBG
+//         }
+//         lcss.push_back(line);
+//         cout << endl;                                 // DBG
+//    }
+//    return to_string(lcss[size1][size2].value) + '\n';
+// }
+
+
+
+//===========================================================================================================
+// JOÃO
 
 // string problem2() {
 //     vector<int> seq1 = readToVector();

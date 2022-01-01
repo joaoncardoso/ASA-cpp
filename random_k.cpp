@@ -28,11 +28,10 @@ void genSeq(int n, int init, int a) {
 	int next = init;
 	srand(rand());
 	for (int i=1; i<=n; i++) {
-		if (rand() < a) next += (rand() % 5) + 1;
-		else            next -= (rand() %  3) + 1;
+		if (rand() < a) next += ((rand() % 5)) + 1;
+		else            next -= ((rand() * 10) %  3) + 1;
 		if (next <= 0) { // guard
-			cout << "ERROR: number <= 0" << endl;
-			exit(1);
+			next = -next;
 		}
 		s.append(to_string(next) + " ");
 	}

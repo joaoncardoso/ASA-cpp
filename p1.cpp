@@ -65,6 +65,14 @@ string problem1() {
 //===========================================================================================================
 // MOOSHAK 1050 JOTA
 
+bool has(vector<int> v, int k) {
+    int s = (int)v.size();
+    for (int i = 0; i < s; i++) {
+        if (v[i] == k) return true;
+    }
+    return false;
+}
+
 string problem2() {
     vector<int> seq1 = readToVector();
     vector<int> seq2 = readToVector();
@@ -72,18 +80,43 @@ string problem2() {
     vector<vector<int>> lcss = {}; // lcss = Longest Common Subsequence Size
     vector<vector<int>> pins = {};
 
+    vector<int> common1; // removing uncommon elements between the two vectors
+    vector<int> common2;
+
+    for (int i = 0; i < (int)seq1.size(); i++) {
+        if (has(seq2, seq1[i])) {
+            common1.push_back(seq1[i]);
+        }
+    }
+    for (int i = 0; i < (int)seq2.size(); i++) {
+        if (has(common1, seq2[i])) {
+            common2.push_back(seq2[i]);
+        }
+    }
+    size1 = (long)common1.size();
+    size2 = (long)common2.size();
+
+    for (int i = 0; i < size1; i++) {  // DBG
+        cout << common1[i] << " ";     // DBG
+    }                                  // DBG
+    cout << endl;                      // DBG
+    for (int i = 0; i < size2; i++) {  // DBG
+        cout << common2[i] << " ";     // DBG
+    }                                  // DBG
+    cout << endl;                      // DBG  
+
     for (int i = 0; i <= size1; i++) {
         vector<int> lcssline = {};
         vector<int> pinsline = {};
         for (int j = 0; j <= size2; j++) {
             if (i * j == 0)
                 lcssline.push_back(0);
-            else if (seq1[i-1] == seq2[j-1]) {  // match!
+            else if (common1[i-1] == common2[j-1]) {  // match!
                 pinsline.push_back(j);
                 lcssline.push_back(0);
                 for (int k = i-1; k > 0; k--) {
                     for (int l = pins[k].size()-1; l >= 0; l--) {
-                        if (seq2[pins[k][l]-1] < seq2[j-1] && pins[k][l] < j) {
+                        if (common2[pins[k][l]-1] < common2[j-1] && pins[k][l] < j) {
                             lcssline[j] = lcss[k][pins[k][l]] + 1;
                             goto jump;
                         }
@@ -150,12 +183,19 @@ string problem2() {
 // string problem2() {
 //     vector<int> seq1 = readToVector();
 //     vector<int> seq2 = readToVector();
-//     int lcss[seq1.size()+1][seq2.size()+1] = {};  // lcss = Longest Common Subsequence Size
-//     int pin = -1;
+//     const long size1 = seq1.size();//, size2 = seq2.size();
+//     auto lcss = new int [size1 + 1][10001];
+//     // int lcss[seq1.size()+1][seq2.size()+1] = {};  // lcss = Longest Common Subsequence Size
 
 //     for (int i = 0; i <= (int)seq1.size(); i++) {
 //         for (int j = 0; j <= (int)seq2.size(); j++) {
-//             if (i * j == 0)
+//             bool has(vector<int> v, int k) {
+//     int s = (int)v.size();
+//     for (int i = 0; i < s; i++) {
+//         if (v[i] == k) return true;
+//     }
+//     return false;
+// }if (i * j == 0)
 //                 lcss[i][j] = 0;
 //             else if (seq1[i-1] == seq2[j-1]) {  // match!
 //                 if (seq1[pin] < seq2[j-1]) {
@@ -173,6 +213,78 @@ string problem2() {
 //     }
 //     return to_string(lcss[seq1.size()][seq2.size()]) + '\n';
 // }
+
+// JOÃO NÃO FUNCIONAL
+string problem22() {
+    vector<int> seq1 = readToVector();
+    vector<int> seq2 = readToVector();
+    long size1 = seq1.size(), size2 = seq2.size();
+    // int lcss[size1 + 1][size2+1] = {};  // lcss = Longest Common Subsequence Size
+    auto lcss = new int [size1 + 1][10001];
+    int pin = -1, prevpin = -1;
+    vector<int> common1;
+    vector<int> common2;
+    vector<int> temp_seq;
+    for (int i = 0; i < (int)seq1.size(); i++) {
+        if (has(seq2, seq1[i])) {
+            common1.push_back(seq1[i]);
+        }
+    }
+    for (int i = 0; i < (int)seq2.size(); i++) {
+        if (has(common1, seq2[i])) {
+            common2.push_back(seq2[i]);
+        }
+    }
+    size1 = (long)common1.size();
+    size2 = (long)common2.size();
+    for (int i = 0; i < size1; i++) {
+        cout << common1[i] << " ";
+    }
+    cout << endl;
+    for (int i = 0; i < size2; i++) {
+        cout << common2[i] << " ";
+    }
+    cout << endl;
+
+    
+    for (int i = 0; i <= size1; i++) {
+        for (int j = 0; j <= size2; j++) {
+            if (i * j == 0)
+                lcss[i][j] = 0;
+            else if (common1[i-1] == common2[j-1]) {  // match!
+                cout << " match " << common2[j-1] << endl;
+                if (common2[pin] < common2[j-1]) {
+                    lcss[i][j] = lcss[i-1][j-1] + 1;
+                    if (j-1 > pin || (temp_seq.size() == 1)) {
+                        prevpin = pin;
+                        pin = j-1;
+                    }
+                    cout << " pin " << common2[pin] << endl;
+                }
+                else if (common2[pin] > common2[j-1] && common2[j-1] >= common2[prevpin]) {
+                    cout << j-1 << " " << pin <<endl;
+                    if (j-1 > pin) {
+                        prevpin = pin;
+                        pin = j-1;
+                    }
+                    cout << " pin2 " <<common2[pin] << endl;
+                }
+                lcss[i][j] = max(max(lcss[i][j], 1), max(lcss[i-1][j], lcss[i][j-1]));
+            }
+            else
+                lcss[i][j] = max(lcss[i-1][j], lcss[i][j-1]);
+        }
+    }
+    for (int i = 0; i < size1 + 1; i++) {
+      for (int j = 0; j < size2 + 1; j++) {
+        cout << lcss[i][j] << " ";
+      }
+
+      // Newline for new row
+      cout << endl;
+    }
+    return to_string(lcss[size1][size2]) + '\n';
+}
 
 vector<int> readToVector() {
 

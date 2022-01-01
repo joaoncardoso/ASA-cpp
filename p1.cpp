@@ -42,8 +42,11 @@ string problem1() {
                     lss[i] = lss[j] + 1;
                     freq[i] = freq[j];
                 }
-                else if (lss[j] + 1 == lss[i])
-                    freq[i] += freq[j];
+                else {
+                    freq[i] += freq[j] * (lss[j] + 1 == lss[i]);
+                }
+                // else if (lss[j] + 1 == lss[i])
+                //     freq[i] += freq[j];
             }
             else if (lss[i] < 1)
                 lss[i] = freq[i] = 1;
@@ -51,8 +54,9 @@ string problem1() {
         longest = max(lss[i], longest);
     }
     for (int i = 0; i < size; i++) {
-        if (lss[i] == longest)
-            num += freq[i];
+        num += freq[i] * (lss[i] == longest);
+        // if (lss[i] == longest)
+        //     num += freq[i];
     }
     return to_string(longest) + ' ' + to_string(num) + '\n';
 }

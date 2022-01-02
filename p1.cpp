@@ -30,33 +30,26 @@ int main() {
 
 string problem1() {
     vector<int> seq = readToVector();
-    vector<int> lss (1, 1); // lss = Longest Subsequence Size
-    vector<int> freq (1, 1);
+    vector<int> lss (1, 1);     // lss = longest subsequence size
+    vector<int> quant (1, 1);   // quant = quantity
     int longest = 1, num = 0, size = seq.size();
     for (int i = 1; i < size; i++) {
-        lss.push_back(0);
-        freq.push_back(0);
+        lss.push_back(1);
+        quant.push_back(1);
         for (int j = 0; j < i; j++) {
             if (seq[j] < seq[i]) {
                 if (lss[j] + 1 > lss[i]) {
                     lss[i] = lss[j] + 1;
-                    freq[i] = freq[j];
+                    quant[i] = quant[j];
                 }
-                else {
-                    freq[i] += freq[j] * (lss[j] + 1 == lss[i]);
-                }
-                // else if (lss[j] + 1 == lss[i])
-                //     freq[i] += freq[j];
+                else
+                    quant[i] += quant[j] * (lss[j] + 1 == lss[i]);
             }
-            else if (lss[i] < 1)
-                lss[i] = freq[i] = 1;
         }
         longest = max(lss[i], longest);
     }
     for (int i = 0; i < size; i++) {
-        num += freq[i] * (lss[i] == longest);
-        // if (lss[i] == longest)
-        //     num += freq[i];
+        num += quant[i] * (lss[i] == longest);
     }
     return to_string(longest) + ' ' + to_string(num) + '\n';
 }

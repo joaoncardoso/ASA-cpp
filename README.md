@@ -11,7 +11,12 @@
 
 * **Problema 1** (Maior subsequência crescente, **Complexidade quadrática**):
 >
-> *TODO description*
+> No problema 1, a nossa primeira ideia foi implementar uma função recursiva, que fosse iterando pela sequência, do último elemento para o primeiro, com diversos parâmetros que permitissem a continuação do estado, caso se encontrasse um elemento menor do que o considerado ou a iniciação de um novo, caso contrário. No entanto, nem foi preciso analisar o tempo de execução para rapidamente percebermos que era uma má forma de solucionar o problema.
+Optamos, então, por uma solução dinâmica, que fosse armazenando valores para evitar o uso de recursões desnecessárias. Assim, a nossa implementação itera pelos elementos da sequência do início para o fim e, para cada um deles, itera pelos elementos anteriores, também do início para o fim, sem exceções ou saídas dos ciclos, o que nos garante que estamos na presença de um Limite Assimptótico Apertado de grandeza n<sup>2</sup>.
+O que nos garante que esta solução funcione para o problema é a existência, em memória, de 2 vetores da mesma dimensão da sequência: o `lss` (de *longest sequence size*) e o `quant` (de *quantity*). Para cada índice, o primeiro, como o nome indica, mantém o tamanho da maior sequência estritamente crescente na qual está o elemento considerado, e o segundo regista a quantidade de sequências desse mesmo tamanho que contêm o elemento.
+**EXEMPLO *TODO***
+Finalmente, um último processamento linear permite determinar qual o maior elemento do `lss`, isto é, o tamanho da maior subsequência que queremos, e 
+a soma dos elementos de `quant` cujos índices correspondem aos índices que contém esse tal tamanho em `lss`, isto é, a soma do número total de sequências de tamanho máximo.
 >
 
 

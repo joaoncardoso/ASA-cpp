@@ -25,8 +25,8 @@ O que permite que esta solução funcione para o problema considerado é a exist
 
 </div>
 
-> Finalmente, um último processamento linear permite determinar qual o maior elemento do `lss`, isto é, o tamanho da maior subsequência que queremos, e 
-a soma dos elementos de `quant` cujos índices correspondem aos índices que contém esse tal tamanho em `lss`, isto é, a soma do número total de sequências de tamanho máximo.
+> Por cada iteração pelos elementos da sequência, é atualizada uma variável que contém o maior elemento do `lss`, isto é, o tamanho da maior subsequência que queremos, caso necessário, e é também atualizado o valor da soma dos elementos de `quant` cujos índices correspondem aos índices que contém esse tal tamanho em `lss`, isto é, a soma do número total de sequências de tamanho máximo.
+Finalmente, é devolvido o output desejado nas especificações do problema.
 
 
 
@@ -34,7 +34,8 @@ a soma dos elementos de `quant` cujos índices correspondem aos índices que con
 
 > No problema 2, a nossa abordagem foi bastante diferente da do problema 1. Inicialmente, pensamos em fazer uma matriz do tamanho das 2 sequências do *input* e aplicar um algoritmo de determinação da maior subsequência comum (LCS), ignorando a particularidade da subsequência comum ter de ser estritamente crescente, seguindo-se um processamento linear sobre os resultados obtidos na matriz, de modo a verificar o tamanho da maior subsequência comum por ordem crescente, com um algoritmo do género do proposto para o Problema 1.
 
-> No entanto, surgiu uma ideia de implementação mais original e compacta: em vez de irmos guardando na matriz os valores da maior subsequência comum, passamos a guardar os valores da maior subsequência estritamente crescente até aos índices considerados, alterando apenas o código na condição em que se encontram 2 valores idênticos. Após a introdução de mais um ciclo *for* e uma verificação que quebra com o ciclo, podemos assumir que a complexidade algorítmica da nossa sugestão de resolução do Problema 2 é **O(n<sup>3</sup>)**, sendo que se aproxima muito de O(n<sup>2</sup>).
+> No entanto, surgiu uma ideia de implementação mais original e compacta: em vez de irmos guardando na matriz os valores da maior subsequência comum, passamos a guardar os valores da maior subsequência estritamente crescente até aos índices considerados. Após a introdução de mais um ciclo *for* e uma verificação que quebra com o ciclo, podemos assumir que a complexidade algorítmica da nossa sugestão de resolução do Problema 2 é **O(n<sup>3</sup>)**, sendo que se aproxima de O(n<sup>2</sup>).
+Esta solução foi, posteriormente otimizada com recurso a um pré-processamento que retirasse os elementos da sequência considerada que não estivessem também presentes da outra sequência.
 > 
 > ***TODO***
 

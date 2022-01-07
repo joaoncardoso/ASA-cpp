@@ -82,16 +82,14 @@ void problem2() {
     for (int i = 0; i < size1; i++) {
         int curr = 0;
         for (int j = 0; j < size2; j++) {
-            if (seq1[i] == seq2[j]) 
-                lcis[j] = max(curr + 1, lcis[j]);
             if (seq1[i] > seq2[j])
                 curr = max(curr, lcis[j]);
+            else if (seq1[i] == seq2[j]) {
+                lcis[j] = max(curr + 1, lcis[j]);
+                res = max(lcis[j], res);
+            }
         }
     }
-
-    for (int i = 0; i < size2; i++)
-        res = max(lcis[i], res);
-
     cout << res << endl;
 }
 

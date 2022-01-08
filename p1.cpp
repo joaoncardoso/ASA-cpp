@@ -3,7 +3,8 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
-#include <unordered_map>
+#include <unordered_set>
+
 using namespace std;
 
 //========================================= Declarations ===========================================
@@ -17,11 +18,11 @@ void cinToVector(vector<int> &seq);
 // Solves problem 2
 void problem2();
 
-// Reads a line of integers from the terminal to the vector and map given
-void cinToVectorMap(vector<int> &seq, unordered_map<int, int> &seqmap);
+// Reads a line of integers from the terminal to the vector and set given
+void cinToVectorSet(vector<int> &seq, unordered_set<int> &seqset);
 
-// Reads a line of integers from the terminal to the vector given, only if they belong to the map given
-void cinToVectorIfInMap(vector<int> &seq, const unordered_map<int, int> &seqmap);
+// Reads a line of integers from the terminal to the vector given, only if they belong to the set given
+void cinToVectorIfInSet(vector<int> &seq, const unordered_set<int> &seqset);
 
 //============================================= Main ===============================================
 
@@ -44,25 +45,23 @@ void problem1() {
     int lis[size];     // lis = longest increasing subsequence
     int quant[size];   // quant = quantity
     for (int i = 0; i < size; i++) {
-        int lis_val = 1, quant_val = 1;
+        lis[i] = quant[i] = 1;
         for (int j = 0; j < i; j++) {
             if (seq[j] < seq[i]) {
-                if (lis[j] + 1 > lis_val) {
-                    lis_val = lis[j] + 1;
-                    quant_val = quant[j];
+                if (lis[j] + 1 > lis[i]) {
+                    lis[i] = lis[j] + 1;
+                    quant[i] = quant[j];
                 }
                 else
-                    quant_val += quant[j] * (lis[j] + 1 == lis_val);
+                    quant[i] += quant[j] * (lis[j] + 1 == lis[i]);
             }
         }
-        if (lis_val > res) {
-            res = lis_val;
-            num = quant_val;
+        if (lis[i] > res) {
+            res = lis[i];
+            num = quant[i];
         }
         else
-            num += quant_val * (lis_val == res);
-        lis[i] = move(lis_val);
-        quant[i] = move(quant_val);
+            num += quant[i] * (lis[i] == res);
     }
     cout << res << " " << num << endl;
 }
@@ -72,9 +71,9 @@ void problem1() {
 void problem2() {
 
     vector<int> seq1; vector<int> seq2;
-    unordered_map<int, int> seq1map;
-    cinToVectorMap(seq1, seq1map);
-    cinToVectorIfInMap(seq2, seq1map);
+    unordered_set<int> seq1set;
+    cinToVectorSet(seq1, seq1set);
+    cinToVectorIfInSet(seq2, seq1set);
     int size1 = seq1.size(), size2 = seq2.size(), res = 0;
 
     int lcis[size2] = {0}; // lcis = longest common increasing subsequence
@@ -82,9 +81,9 @@ void problem2() {
     for (int i = 0; i < size1; i++) {
         int curr = 0;
         for (int j = 0; j < size2; j++) {
-            if (seq1[i] > seq2[j])
+            if (seq2[j] < seq1[i])
                 curr = max(curr, lcis[j]);
-            else if (seq1[i] == seq2[j]) {
+            else if (seq2[j] == seq1[i]) {
                 lcis[j] = max(curr + 1, lcis[j]);
                 res = max(lcis[j], res);
             }
@@ -106,7 +105,7 @@ void cinToVector(vector<int> &seq) {
         seq.push_back(move(num));
 }
 
-void cinToVectorMap(vector<int> &seq, unordered_map<int, int> &seqmap) {
+void cinToVectorSet(vector<int> &seq, unordered_set<int> &seqset) {
 
     int num;
     string line;
@@ -115,11 +114,11 @@ void cinToVectorMap(vector<int> &seq, unordered_map<int, int> &seqmap) {
 
     while (ss >> num) {
         seq.push_back(move(num));
-        seqmap.insert(make_pair(move(num), NULL));
+        seqset.insert(move(num));
     }
 }
 
-void cinToVectorIfInMap(vector<int> &seq, const unordered_map<int, int> &seqmap) {
+void cinToVectorIfInSet(vector<int> &seq, const unordered_set<int> &seqset) {
 
     int num;
     string line;
@@ -127,7 +126,7 @@ void cinToVectorIfInMap(vector<int> &seq, const unordered_map<int, int> &seqmap)
     istringstream ss(line);
 
     while (ss >> num) {
-        if (seqmap.count(num))
+        if (seqset.count(move(num)))
             seq.push_back(move(num));
     }
 }

@@ -3,9 +3,9 @@
 ## Projeto 1:
 ###### DATAS: 03/12/2021 - ~~04/01/2022~~ 11/01/2022
 
-- [ ] Problema 1
+- [X] Problema 1
 - [X] Problema 2
-- [ ] Relatório
+- [X] Relatório
 
 
 
@@ -34,7 +34,7 @@ Finalmente, é devolvido o output desejado nas especificações do problema.
 
 > No problema 2, a nossa abordagem foi bastante diferente da do problema 1. Inicialmente, pensamos em fazer uma matriz do tamanho das 2 sequências do *input* e aplicar um algoritmo de determinação da maior subsequência comum (LCS), ignorando a particularidade da subsequência comum ter de ser estritamente crescente, seguindo-se um processamento linear sobre os resultados obtidos na matriz, de modo a verificar o tamanho da maior subsequência comum por ordem crescente, com um algoritmo do género do proposto para o Problema 1. Posteriormente, surgiu uma outra ideia mais original e compacta: passarmos a guardar, nos índices da matriz, os valores da maior subsequência estritamente crescente até aos índices considerados. No entanto, obtivemos diversos problemas de memória e tempo de execução, nas diversas implementações que testávamos. Assim, fomos obrigados a desistir da nossa ideia e a pensar, novamente, fora da caixa.
 
-> Chegamos, então, a uma solução diferente, mas que não deixava de ser dinâmica. Por cada elemento da `seq1`, iterávamos também por todos os elementos da `seq2` do início para o fim, sem exceções ou saídas dos ciclos, o que nos garante que estamos na presença de um Limite Assimptótico Apertado de grandeza **n<sup>2</sup>**, assim como no problema 1. Foi utilizada uma array da mesma dimensão da `seq2` que, para cada índice, guardasse o tamanho da maior subsequência estritamente crescente comum entre as 2 sequências que acabasse nesse elemento da `seq2`. Com resurso a uma variável local, por cada elemento percorrido da `seq2`:
+> Chegamos, então, a uma solução diferente, mas que não deixava de ser dinâmica. Por cada elemento da `seq1`, iterávamos também por todos os elementos da `seq2` do início para o fim, sem exceções ou saídas dos ciclos, o que nos garante que estamos na presença de um Limite Assimptótico Apertado de grandeza **n<sup>2</sup>**, assim como no problema 1. Foi utilizada uma array da mesma dimensão da `seq2` que, para cada índice, guardasse o tamanho da maior subsequência estritamente crescente comum entre as 2 sequências que acabasse nesse elemento da `seq2`. Com recurso a uma variável local, por cada elemento percorrido da `seq2`:
 > - se for menor que o da `seq1`, a variável assume o valor do índice da `lcis` considerado, caso seja maior do que se encontra lá;
 > - se for igual ao da `seq1`, o índice da `lcis` toma o valor da variável incrementado numa unidade, caso seja maior do que se encontra lá.
 

@@ -1,5 +1,22 @@
 # ProjetoASA
 
+
+## Projeto 2:
+###### DATAS: 14/01/2022 - 28/01/2022 (17:00h)
+
+- [ ] Problema
+- [ ] Relatório
+
+
+> *TODO*
+
+
+
+[//]: # (This is the end of Project 2 documentation)
+---
+
+
+
 ## Projeto 1:
 ###### DATAS: 03/12/2021 - ~~04/01/2022~~ 11/01/2022
 
@@ -56,8 +73,3 @@ Finalmente, é devolvido o output desejado nas especificações do problema.
 </div>
 
 > Notámos que poderíamos tornar o algoritmo ainda mais eficiente, pois será previsível, à partida e antes da execução do algoritmo, que haverá índices da `lcis` que irão conter `0` (os índices dos elementos da `seq2` que não estão presentes na `seq1`). Esta solução foi, então, posteriormente otimizada com recurso a um pré-processamento que, na leitura da 2ª linha para o vetor `seq2`, apenas escrevesse os elementos que também estivessem presentes na `seq1`. Com recurso a um mapa desses elementos, fizemos com que a procura fosse O(1), na maioria dos casos. Por fim, é feita uma última procura linear pelo elemento máximo da `lcis`, o resultado que queremos.
-
----
-
-## Projeto 2:
-###### DATAS: *TBD*

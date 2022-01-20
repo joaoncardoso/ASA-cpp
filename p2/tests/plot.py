@@ -4,7 +4,7 @@ import graphviz
 
 # *****************************************************************
 # Vizualizer of DAGS
-# Diogo Correia - 99211 Tomás Esteves - 99341
+# Diogo Correia - 99211 Tomas Esteves - 99341
 # ****************************************************************/
 
 # You may need to download the package:
@@ -12,7 +12,7 @@ import graphviz
 # https://graphviz.readthedocs.io/en/stable/manual.html#installation
 
 # To create the DAG, just run at the terminal:
-#               python plot.py < file
+#               python3 plot.py < file
 # Where file is the input with the format used in the Project
 # If you detect a bug let us know
 

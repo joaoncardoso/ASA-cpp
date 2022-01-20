@@ -5,6 +5,8 @@
 
 using namespace std;
 
+const int MAX_PARENTS = 2;
+
 //========================================= Declarations ===========================================
 
 // Colors availabe for each vertex (white by default)
@@ -14,7 +16,7 @@ enum colors {
 
 // Each vertex holds its color and its parents' vertex numbers
 struct vertex {
-    vector<int> parents = {};
+    int parents[MAX_PARENTS] = {-1, -1};
     colors color = white;
 };
 
@@ -28,28 +30,29 @@ void dfs(int v, colors c, vertex vertices[]);
 
 int main() {
 
-    int v1, v2, num_vertices, num_edges, parent, child;
+    int v1, v2, num_vertices, num_edges, p, c;
+    int busy = 0;
 
     cinToIntegers(v1, v2);
     cinToIntegers(num_vertices, num_edges);
 
-    vertex vertices[num_vertices + 1];
+    //vertex vertices[num_vertices + 1];
+    vertex* vertices = new vertex[num_vertices + 1];
     vector<int> lca;    // lca = lowest common ancestors
     string res;
 
     for (int i = 0; i < num_edges; i++) {
-        cinToIntegers(parent, child);
-        vertices[child].parents.push_back(parent);
-    }
-    // Invalid tree exception
-    for (int i = 1; i <= num_vertices; i++) {
-        if (vertices[i].parents.size() > 2) {
-            cout << "0";
-            return -1;
+        cinToIntegers(p, c);
+        for (int i = 0, busy = 0; i < MAX_PARENTS; ++i) {
+            if (vertices[c].parents[i] == -1) {
+                vertices[c].parents[i] = p;
+                break;
+            } else busy +=1;
         }
+        if (busy == 2) return -1;
     }
 
-    // 2 DFS por cada 1 dos vértices
+    // 2 DFS, uma por cada um dos vértices
     dfs(v1, red, vertices);
     dfs(v2, blue, vertices);
 
@@ -86,11 +89,14 @@ void dfs(int v, colors c, vertex vertices[]) {
     if (vertices[v].color == red && c == blue)
         c = purple;
     vertices[v].color = c;
-    vector<int>::iterator i;
-    for (i = vertices[v].parents.begin(); i < vertices[v].parents.end(); i++) {
-        if (vertices[*i].color == white || (vertices[*i].color == red && c == blue))
-            dfs(*i, c, vertices);
-        else if (c == purple || c == black)
-            dfs(*i, black, vertices);
+    int i, p;
+    for (i = 0; i < MAX_PARENTS; i++) {
+        p = vertices[v].parents[i];
+        if (p != -1) {
+            if (vertices[p].color == white || (vertices[p].color == red && c == blue))
+                dfs(p, c, vertices);
+            else if (c == purple || c == black)
+                dfs(p, black, vertices);
+        }
     }
 }

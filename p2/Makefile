@@ -2,7 +2,7 @@
 # João Nuno Cardoso (99251) // José João Ferreira (99259)
 
 CC = g++
-CPPFLAGS = -g -std=c++11 -O3 -Wall -lm
+CPPFLAGS = -g -std=c++11 -Wall -lm -O3
 TARGET_EXECS := p2 randGeneoTree
 
 all: $(TARGET_EXECS)

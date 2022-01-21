@@ -16,7 +16,8 @@ enum colors {
 
 // Each vertex holds its color and its parents' vertex numbers
 struct vertex {
-    int parents[MAX_PARENTS] = {-1, -1};
+    int p1 = -1;
+    int p2 = -1;
     colors color = white;
 };
 
@@ -31,7 +32,6 @@ void dfs(int v, colors c, vertex vertices[]);
 int main() {
 
     int v1, v2, num_vertices, num_edges, p, c;
-    int busy = 0;
 
     cinToIntegers(v1, v2);
     cinToIntegers(num_vertices, num_edges);
@@ -43,13 +43,20 @@ int main() {
 
     for (int i = 0; i < num_edges; i++) {
         cinToIntegers(p, c);
-        for (int i = 0, busy = 0; i < MAX_PARENTS; ++i) {
-            if (vertices[c].parents[i] == -1) {
-                vertices[c].parents[i] = p;
-                break;
-            } else busy +=1;
+        //if ((p == v1 && c == v2) || (p==v2 && c == v1)) { //if one of the vertices is the other's parent, it is the only least common ancestor.
+        //    cout << p << endl;
+        //}
+        if (vertices[c].p1 + vertices[c].p2 == -2) {
+            vertices[c].p1 = p;
+            continue;
         }
-        if (busy == 2) return -1;
+        else if (vertices[c].p2 == -1) {
+            vertices[c].p2 = p;
+            continue;
+        } else {
+            cout << 0 << endl;
+            return 0;
+        }; // crowded parents
     }
 
     // 2 DFS, uma por cada um dos vértices
@@ -89,14 +96,19 @@ void dfs(int v, colors c, vertex vertices[]) {
     if (vertices[v].color == red && c == blue)
         c = purple;
     vertices[v].color = c;
-    int i, p;
-    for (i = 0; i < MAX_PARENTS; i++) {
-        p = vertices[v].parents[i];
-        if (p != -1) {
-            if (vertices[p].color == white || (vertices[p].color == red && c == blue))
-                dfs(p, c, vertices);
-            else if (c == purple || c == black)
-                dfs(p, black, vertices);
-        }
+    int p;
+    p = vertices[v].p1;
+    if (p != -1) {
+        if (vertices[p].color == white || (vertices[p].color == red && c == blue))
+            dfs(p, c, vertices);
+        else if (c == purple || c == black)
+            dfs(p, black, vertices);
+    }
+    p = vertices[v].p2;
+    if (p != -1) {
+        if (vertices[p].color == white || (vertices[p].color == red && c == blue))
+            dfs(p, c, vertices);
+        else if (c == purple || c == black)
+            dfs(p, black, vertices);
     }
 }

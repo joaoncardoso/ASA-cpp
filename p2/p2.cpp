@@ -5,8 +5,6 @@
 
 using namespace std;
 
-const int MAX_PARENTS = 2;
-
 //========================================= Declarations ===========================================
 
 // Colors availabe for each vertex (white by default)
@@ -36,45 +34,34 @@ int main() {
     cinToIntegers(v1, v2);
     cinToIntegers(num_vertices, num_edges);
 
-    //vertex vertices[num_vertices + 1];
     vertex* vertices = new vertex[num_vertices + 1];
-    vector<int> lca;    // lca = lowest common ancestors
     string res;
 
     for (int i = 0; i < num_edges; i++) {
         cinToIntegers(p, c);
-        //if ((p == v1 && c == v2) || (p==v2 && c == v1)) { //if one of the vertices is the other's parent, it is the only least common ancestor.
-        //    cout << p << endl;
-        //}
-        if (vertices[c].p1 + vertices[c].p2 == -2) {
+        if (vertices[c].p1 == -1)
             vertices[c].p1 = p;
-            continue;
-        }
-        else if (vertices[c].p2 == -1) {
+        else if (vertices[c].p2 == -1)
             vertices[c].p2 = p;
-            continue;
-        } else {
+        else {  // Crowded parents exception
             cout << 0 << endl;
-            return 0;
-        }; // crowded parents
+            return -1;
+        }
     }
 
-    // 2 DFS, uma por cada um dos vértices
+    // 2 DFS, one for each vertex
     dfs(v1, red, vertices);
     dfs(v2, blue, vertices);
 
     for (int i = 1; i <= num_vertices; i++) {
         if (vertices[i].color == purple)
-            lca.push_back(i);
+            res += (to_string(i) + " ");
     }
 
     // No results exception
-    if (lca.empty())
+    if (res.empty())
         res = "-";
-    else {  // Results available
-        for (int i = 0; i < (int)lca.size(); i++)
-            res += to_string(lca[i]) + " ";
-    }
+   
     cout << res << endl;
     return 0;
 }
@@ -96,19 +83,13 @@ void dfs(int v, colors c, vertex vertices[]) {
     if (vertices[v].color == red && c == blue)
         c = purple;
     vertices[v].color = c;
-    int p;
-    p = vertices[v].p1;
-    if (p != -1) {
-        if (vertices[p].color == white || (vertices[p].color == red && c == blue))
-            dfs(p, c, vertices);
-        else if (c == purple || c == black)
-            dfs(p, black, vertices);
-    }
-    p = vertices[v].p2;
-    if (p != -1) {
-        if (vertices[p].color == white || (vertices[p].color == red && c == blue))
-            dfs(p, c, vertices);
-        else if (c == purple || c == black)
-            dfs(p, black, vertices);
+    int p = vertices[v].p1;
+    for (int i = 0; i < 2; i++, p = vertices[v].p2) {
+        if (p != -1) {
+            if (vertices[p].color == white || (vertices[p].color == red && c == blue))
+                dfs(p, c, vertices);
+            else if (c == purple || c == black)
+                dfs(p, black, vertices);
+        }
     }
 }

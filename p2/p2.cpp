@@ -45,7 +45,7 @@ int main() {
     for (int i = 0; i < num_edges; i++) {
         if (cinToIntegers(p, c) != 0) {
             printf("0\n");
-            return ;
+            return -1;
         }
         if (vertices[c].p1 == 0)
             vertices[c].p1 = p;
@@ -117,11 +117,12 @@ bool has_cycle(int v, unordered_set<int> path, vertex vertices[]) {
         return true;
     else {
         path.insert(v);
-        vertices[v].clear == true;
+        vertices[v].clear = true;
     }
     int p = vertices[v].p1;
     for (int i = 0; i < 2; i++, p = vertices[v].p2) {
         if (p != 0)
             return has_cycle(p, path, vertices);
     }
+    return false;
 }

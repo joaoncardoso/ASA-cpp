@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <sstream>
 #include <vector>
 
 using namespace std;
@@ -14,13 +13,13 @@ enum colors {
 
 // Each vertex holds its color and its parents' vertex numbers
 struct vertex {
-    int p1 = -1;
-    int p2 = -1;
+    unsigned int p1 = 0;
+    unsigned int p2 = 0;
     colors color = white;
 };
 
 // Reads a line of 2 integers to the arguments given from the standard input
-void cinToIntegers(int &a, int &b);
+int cinToIntegers(int &a, int &b);
 
 // Performs a Distance First Search recursively and colors each vertex
 void dfs(int v, colors c, vertex vertices[]);
@@ -38,13 +37,16 @@ int main() {
     string res;
 
     for (int i = 0; i < num_edges; i++) {
-        cinToIntegers(p, c);
-        if (vertices[c].p1 == -1)
+        if (cinToIntegers(p, c)!=0) {
+            printf("0\n");
+            return 0;
+        }
+        if (vertices[c].p1 == 0)
             vertices[c].p1 = p;
-        else if (vertices[c].p2 == -1)
+        else if (vertices[c].p2 == 0)
             vertices[c].p2 = p;
         else {  // Crowded parents exception
-            cout << 0 << endl;
+            printf("0\n");
             return -1;
         }
     }
@@ -68,14 +70,11 @@ int main() {
 
 //====================================== Auxiliary Functions =======================================
 
-void cinToIntegers(int &a, int &b) {
+int cinToIntegers(int &a, int &b) {
 
-    string line;
-    getline(cin, line);
-    istringstream ss(line);
-
-    ss >> a;
-    ss >> b;
+    if (scanf(" %d", &a) && scanf(" %d", &b))
+        return 0;
+    return -1;
 }
 
 void dfs(int v, colors c, vertex vertices[]) {
@@ -85,7 +84,7 @@ void dfs(int v, colors c, vertex vertices[]) {
     vertices[v].color = c;
     int p = vertices[v].p1;
     for (int i = 0; i < 2; i++, p = vertices[v].p2) {
-        if (p != -1) {
+        if (p != 0) {
             if (vertices[p].color == white || (vertices[p].color == red && c == blue))
                 dfs(p, c, vertices);
             else if (c == purple || c == black)

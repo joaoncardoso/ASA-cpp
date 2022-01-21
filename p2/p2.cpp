@@ -26,7 +26,7 @@ int cinToIntegers(int &a, int &b);
 // Performs a Distance First Search recursively and colors each vertex
 void dfs(int v, colors c, vertex vertices[]);
 
-// TODO
+// Tells whether there is a cycle
 bool has_cycle(int v, unordered_set<int> path, vertex vertices[]);
 
 //============================================= Main ===============================================
@@ -39,13 +39,14 @@ int main() {
     cinToIntegers(num_vertices, num_edges);
 
     vertex* vertices = new vertex[num_vertices + 1];
+    unordered_set<int> path;
     string res;
 
     // Input reading
     for (int i = 0; i < num_edges; i++) {
         if (cinToIntegers(p, c) != 0) {
             printf("0\n");
-            return -1;
+            return 0;
         }
         if (vertices[c].p1 == 0)
             vertices[c].p1 = p;
@@ -53,16 +54,16 @@ int main() {
             vertices[c].p2 = p;
         else {  // Crowded parents exception
             printf("0\n");
-            return -1;
+            return 0;
         }
     }
 
     // Tree cycles exception
     for (int i = 1; i <= num_vertices; i++) {
-        unordered_set<int> path;
+        path.clear();
         if (has_cycle(i, path, vertices)) {
             printf("0\n");
-            return -1;
+            return 0;
         }
     }
 
@@ -115,14 +116,14 @@ bool has_cycle(int v, unordered_set<int> path, vertex vertices[]) {
         return false;
     if (path.count(v) > 0)
         return true;
-    else {
+    else
         path.insert(v);
-        vertices[v].clear = true;
-    }
     int p = vertices[v].p1;
+    bool res = false;
     for (int i = 0; i < 2; i++, p = vertices[v].p2) {
         if (p != 0)
-            return has_cycle(p, path, vertices);
+            res = res || has_cycle(p, path, vertices);
     }
-    return false;
+    vertices[v].clear = !res;
+    return res;
 }

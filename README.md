@@ -4,15 +4,13 @@
 ## Projeto 2:
 ###### DATAS: 14/01/2022 - 28/01/2022 (17:00h)
 
-- [ ] Problema
-- [ ] Relatório
-
-
-> *TODO*
+- [X] Problema
+- [X] Relatório
 
 
 
 [//]: # (This is the end of Project 2 documentation)
+
 ---
 
 
